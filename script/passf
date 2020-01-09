@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#pass senza dover specificare tutto il percorso, ma solo il nome (o parte di questo)
+#funziona solo sui comandi di pass con il path come ultimo argomento
+cd $HOME/.password-store/
+argv=$@
+argc=$#
+file=$(find . -wholename *"${@: -1}"* -not -wholename "*.git*")
+occurences=($file)
+if [ $argc -gt 0 ]; then
+    if [ ${#occurences[*]} -eq 1 ]; then
+        occurences[0]="${occurences[0]#*/}"
+        occurences[0]="${occurences[0]%.*}"
+        choice=0
+    elif [ ${#occurences[*]} -gt 1 ]; then
+        for i in ${!occurences[*]}
+        do
+            occurences[$i]="${occurences[$i]#*/}"
+            occurences[$i]="${occurences[$i]%.*}"
+            echo '('$i')' ${occurences[$i]}
+        done
+        echo "Quale tra queste?"
+        read choice
+    else
+        echo "Occorrenza non trovata"
+    fi
+    pass ${@:1:argc-1} ${occurences[$choice]}
+else
+    pass
+fi

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# https://source.unsplash.com/random/{SIZE}
+# https://source.unsplash.com/user/{USERNAME}/{SIZE}
+# https://source.unsplash.com/user/{USERNAME}/likes/{SIZE}
+# https://source.unsplash.com/collection/{COLLECTION ID}/{SIZE}
+# https://source.unsplash.com/category/{CATEGORY}/?{SEARCH,TERM}
+# https://source.unsplash.com/?{KEYWORD}
+# https://source.unsplash.com/daily|weekly
+# https://source.unsplash.com/featured/?{KEYWORD},{KEYWORD}
+# https://source.unsplash.com/1600x900/{?SEARCH,TERM}
+# https://source.unsplash.com/{PHOTO ID}/1600x900
+# https://source.unsplash.com/ -- API documentation
+
+declare -a collections=('217569' '201' '266986' '142563' '452289' '862387' '1007074' '921374' '142376' '326594' '1657511' '3694365')
+coll=$RANDOM%${#collections[@]}
+
+#ping -q -w 1 -c 1 8.8.8.8 > /dev/null
+
+if [ $? -eq 0 ]; then 
+        
+    rm $HOME/Utilità/.img
+    wget -O $HOME/Utilità/.img "https://source.unsplash.com/collection/${collections[coll]}/1600x900"
+    echo https://source.unsplash.com/collection/${collections[coll]}/1600x900
+    gsettings set org.gnome.desktop.background picture-uri $HOME/Utilità/.img
+    gsettings set org.gnome.desktop.screensaver picture-uri $HOME/Utilità/.img
+#feh --bg-fill $HOME/Utilità/.img
+
+
+# wget -O img "https://source.unsplash.com/collection/149064/1600x900"
+# wget -O img "https://source.unsplash.com/1600x900/?nature,water"
+else
+    echo "Non c'è connessione"
+fi 

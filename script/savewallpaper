@@ -1,0 +1,8 @@
+#!/bin/bash
+
+d=$(date)
+path=$HOME/Immagini/Sfondi
+cp .img $path
+cd $path
+mv .img "$d"
+echo $path/"$d"

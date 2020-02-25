@@ -32,11 +32,11 @@ args = parser.parse_args()
 
 
 if (args.day):
-    args.startday = args.day
+    args.startdate = args.day
     args.enddate = args.day
 
 if (args.year):
-    args.startday = '01/01/' + args.year
+    args.startdate = '01/01/' + args.year
     args.enddate = '31/12/' + args.year
 
 name = args.name
@@ -50,6 +50,6 @@ datedir = []
 
 for f in files:
     t = datetime.datetime.strptime(time.ctime(creation_date(f)), "%a %b %d %H:%M:%S %Y")
-    if ((not args.startday) or t >= convert_date(args.startday)) and ((not args.enddate) or t <= (convert_date(args.enddate) + datetime.timedelta(days=1))):
+    if ((not args.startdate) or t >= convert_date(args.startdate)) and ((not args.enddate) or t <= (convert_date(args.enddate) + datetime.timedelta(days=1))):
         print(f + " -> " + name)
         shutil.move(f, name)

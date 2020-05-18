@@ -1,0 +1,6 @@
+#!/bin/bash
+gpg --output mygpgkey_pub.gpg --armor --export $1
+gpg --output mygpgkey_sec.gpg --armor --export-secret-key $1
+
+echo "Generated mygpgkey_pub.gpg mygpgkey_sec.gpg"
+

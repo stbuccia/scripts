@@ -1,0 +1,17 @@
+#!/bin/bash
+# A simple shell script to rip audio cd and create mp3 using lame 
+# and cdparanoia utilities.
+# ----------------------------------------------------------------------------
+# Written by Vivek Gite <http://www.cyberciti.biz/>
+# (c) 2006 nixCraft under GNU GPL v2.0+
+# ----------------------------------------------------------------------------
+mkdir "$1"
+cd "$1"
+cdparanoia -B
+for i in *.wav; do     
+
+    ffmpeg -i "$i" -acodec libvorbis "${i%%.cdda.wav}.ogg"
+	rm -f "$i"
+done
+eject
+picard . 

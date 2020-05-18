@@ -20,8 +20,11 @@ coll=$RANDOM%${#collections[@]}
 if [ $? -eq 0 ]; then 
         
     rm $HOME/Immagini/.img
-    wget -O $HOME/Immagini/.img "https://source.unsplash.com/collection/${collections[coll]}/1600x900"
-    echo https://source.unsplash.com/collection/${collections[coll]}/1600x900
+    #URI="https://source.unsplash.com/collection/${collections[coll]}/1600x900"
+
+    URI="https://source.unsplash.com/category/wallpaper"
+    wget -O $HOME/Immagini/.img $URI
+    echo $URI
     if [ "$DESKTOP_SESSION" = "gnome" ]; then
         gsettings set org.gnome.desktop.background picture-uri $HOME/Immagini/.img
         gsettings set org.gnome.desktop.screensaver picture-uri $HOME/Immagini/.img

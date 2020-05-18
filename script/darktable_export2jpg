@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in *.NEF; do  darktable-cli "$i" "$i.xmp" "${i%%.NEF}.jpg"; done
+for i in *.jpg; do  mv "$i" "${i%%.jpg}.JPG"; done
+mkdir JPG
+mv *.JPG JPG
+
+
+

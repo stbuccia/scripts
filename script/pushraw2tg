@@ -1,0 +1,15 @@
+#/bin/bash
+cd $1
+mapfile -t files < <( zipsize *NEF $2 )
+# rm *NEF
+tgpath=~/Software/tg
+cd ${tgpath}
+for f in "${files[@]}"
+do
+    cmd="bin/telegram-cli -W -k server.pub -e \"send_document Stefano_Bucciarelli ${1}/${f}\""
+    echo $cmd
+    eval $cmd
+    #echo ./bin/telegram-cli -k tg-server.pub -e "'send_document Stefano_Bucciarelli $1/${f}'"
+    #./bin/telegram-cli -k tg-server.pub -e "'send_document Stefano_Bucciarelli $0/${f}'"
+    #bin/telegram-cli -e 'send_document Stefano_Bucciarelli ${f}' -k tg-server.pub
+done

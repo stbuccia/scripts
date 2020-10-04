@@ -1,0 +1,55 @@
+#!/usr/bin/python3
+
+import time, sys, os, datetime, argparse, platform, shutil
+from os import listdir, chdir, path, mkdir, replace, stat
+from os.path import isfile, join, getctime, exists, getsize
+
+'''
+def creation_date(path):
+    if platform.system() == 'Windows':
+        return getctime(path_to_file)
+    else:
+        st = stat(path)
+        try:
+            return st.st_birthtime
+        except AttributeError:
+            return st.st_mtime
+
+dateformat = '%d/%m/%Y'
+
+def convert_date(str):
+    return datetime.datetime.strptime(str, dateformat)
+'''
+
+parser = argparse.ArgumentParser(
+    description='''Script for tar files in sets limited by size ''')
+parser.add_argument("files", nargs='+', help='input files')
+parser.add_argument("name", help='output name')
+parser.add_argument("-s", "--size", default=1500000000, help='set size in byte')
+parser.add_argument("--dir", nargs='?', const=True, default=False, help='tar also directory')
+args = parser.parse_args()
+
+name = args.name
+
+files = [f for f in args.files if args.dir or isfile(f)]
+
+tars = {}
+
+size = 0
+pieces = 0
+tars[name + str(pieces)] = []
+for f in files:
+    if (size + os.path.getsize(f) < args.size):
+        size += os.path.getsize(f)
+        tars[name + str(pieces)].append(f)
+    elif (os.path.getsize(f) < args.size):
+        size = os.path.getsize(f)
+        pieces += 1
+        tars[name + str(pieces)] = [f]
+    else:
+        print(f + " too large, not compressed")
+
+for key in tars:
+    outname = key + ".tar"
+    os.system("tar cf " + outname + " " + (" ".join(tars[key])))
+    print(outname)

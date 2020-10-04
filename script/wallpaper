@@ -14,29 +14,32 @@
 
 declare -a collections=('217569' '201' '266986' '142563' '452289' '862387' '1007074' '921374' '142376' '326594' '1657511' '3694365')
 coll=$RANDOM%${#collections[@]}
-
-#ping -q -w 1 -c 1 8.8.8.8 > /dev/null
+path=$HOME/Immagini/.img
 
 if [ $? -eq 0 ]; then 
         
-    rm $HOME/Immagini/.img
+    rm $path
     #URI="https://source.unsplash.com/collection/${collections[coll]}/1600x900"
-
-    URI="https://source.unsplash.com/category/wallpaper"
-    wget -O $HOME/Immagini/.img $URI
+    if [ $# -eq 0 ]; then
+        URI="https://source.unsplash.com/category/wallpaper"
+    else 
+        URI="https://source.unsplash.com/random/?"$1   
+    fi
+    wget -O $path $URI
     echo $URI
     if [ "$DESKTOP_SESSION" = "gnome" ]; then
-        gsettings set org.gnome.desktop.background picture-uri $HOME/Immagini/.img
-        gsettings set org.gnome.desktop.screensaver picture-uri $HOME/Immagini/.img
+        gsettings set org.gnome.desktop.background picture-uri $path
+        gsettings set org.gnome.desktop.screensaver picture-uri $path
     elif [ "$DESKTOP_SESSION" = "xfce" ]; then
         for i in $(xfconf-query -c xfce4-desktop -p /backdrop -l|egrep -e "screen.*/monitor.*image-path$" -e "screen.*/monitor.*/last-image$"); do
-            xfconf-query -c xfce4-desktop -p $i -n -t string -s $HOME/Immagini/.img
-            xfconf-query -c xfce4-desktop -p $i -s $HOME/Immagini/.img
+            xfconf-query -c xfce4-desktop -p $i -n -t string -s $path
+            xfconf-query -c xfce4-desktop -p $i -s $path
         done
+    elif [ "$DESKTOP_SESSION" = "i3" ]; then
+        feh --bg-fill $path
     else
-        echo "Works only in gnome"
+        echo "Works only in gnome, xfce and i3"
     fi
-#feh --bg-fill $HOME/Immagini/.img
 
 
 # wget -O img "https://source.unsplash.com/collection/149064/1600x900"

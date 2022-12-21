@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Script that help me to organize my Photos structure keeping JPG and RAW folder simmetric
+
+#TODO: If there is arg for the path go on the entry
+dir_name=${PWD##*/}
+dir_name=${dir_name:-/}
+
+# If not in RAW folder try to create it and move all NEF file in (check also if is not already in RAW)
+if [ "$dir_name" = "RAW" ]; then
+    cd ..
+fi
+
+if ls RAW 1> /dev/null 2>&1 || ls *.NEF 1> /dev/null 2>&1; then
+    mkdir -p RAW
+    if ls *.NEF 1> /dev/null 2>&1; then
+        mv *.NEF RAW
+    fi
+    # Move the RAW file in the right subfolder: from image root is the same path of JPG folder but in RAW subtree
+    new_position="${PWD/JPG/RAW}"
+    mkdir -p $new_position
+    mv RAW/* $new_position
+    rm -d RAW
+    echo "Moved in " $new_position
+else
+    echo "Not found RAW folder"
+fi
+

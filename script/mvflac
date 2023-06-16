@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Script that help me to organize my Photos structure keeping mp3 and flac folder simmetric
+
+#TODO: If there is arg for the path go on the entry
+dir_name=${PWD##*/}
+dir_name=${dir_name:-/}
+
+filename="flac-list.txt"
+while read -r line; do
+    cd "$line"
+    # If not in flac folder try to create it and move all flac file in (check also if is not already in flac)
+    if [ "$dir_name" = "flac" ]; then
+        cd ..
+    fi
+
+    if ls flac 1> /dev/null 2>&1 || ls *.flac 1> /dev/null 2>&1; then
+        if ls *.mp3 1> /dev/null 2>&1; then
+            echo "Found mp3 in folder"
+        else
+            mkdir -p flac
+            if ls *.flac 1> /dev/null 2>&1; then
+                mv * flac
+            fi
+            # Move the flac file in the right subfolder: from image root is the same path of mp3 folder but in flac subtree
+            new_position="${PWD/mp3/flac}"
+            mkdir -p "$new_position"
+            mv flac/* "$new_position"
+            rm -d flac
+            echo "Moved in " $new_position
+        fi
+    else
+        echo "Not found flac folder"
+    fi
+
+    cd ~/Musica/mp3
+
+    echo "Name read from file - $name"
+done < "$filename"

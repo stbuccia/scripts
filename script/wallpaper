@@ -27,7 +27,7 @@ if [ $? -eq 0 ]; then
     fi
     wget -O $path $URI
     echo $URI
-    if [ "$DESKTOP_SESSION" = "gnome" ]; then
+    if [ "$DESKTOP_SESSION" = "gnome" ] ||  [ "$DESKTOP_SESSION" = "pop" ]; then
         gsettings set org.gnome.desktop.background picture-uri $path
         gsettings set org.gnome.desktop.screensaver picture-uri $path
     elif [ "$DESKTOP_SESSION" = "xfce" ]; then

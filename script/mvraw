@@ -14,12 +14,12 @@ fi
 if ls RAW 1> /dev/null 2>&1 || ls *.NEF 1> /dev/null 2>&1; then
     mkdir -p RAW
     if ls *.NEF 1> /dev/null 2>&1; then
-        mv *.NEF RAW
+        mv *.NEF *.NEF.xmp RAW
     fi
     # Move the RAW file in the right subfolder: from image root is the same path of JPG folder but in RAW subtree
     new_position="${PWD/JPG/RAW}"
-    mkdir -p $new_position
-    mv RAW/* $new_position
+    mkdir -p "$new_position"
+    mv RAW/* "$new_position"
     rm -d RAW
     echo "Moved in " $new_position
 else
